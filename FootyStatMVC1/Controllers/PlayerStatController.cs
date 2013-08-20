@@ -627,7 +627,7 @@ namespace FootyStatMVC1.Controllers
             // Update the stat
             double player_goals = get_total_player_goals();
 
-
+            // Meaningless comment
 
             return View("SelectPlayer", new PlayerStatViewModel(
                                         new List<string>(), 
