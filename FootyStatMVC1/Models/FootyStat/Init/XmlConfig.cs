@@ -34,10 +34,12 @@ namespace FootyStatMVC1.Models.FootyStat.Init
 
             //System.Diagnostics.Debug.WriteLine(temp_str);
 
-            //string base_dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-            string base_dir = AppDomain.CurrentDomain.BaseDirectory;
+            //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location;
 
-            string full_dir = base_dir + "\\FootyStatMVC1\\App_Data";
+            string base_dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            //string base_dir = AppDomain.CurrentDomain.BaseDirectory;
+
+            string full_dir = base_dir + "\\App_Data";
 
             xsdFilename = full_dir + "\\footyStat_xml_schema_v1.xsd";
             xsdFieldBlockName = "gameRowType";
