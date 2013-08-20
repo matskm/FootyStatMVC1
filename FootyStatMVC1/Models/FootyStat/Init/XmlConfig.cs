@@ -29,7 +29,13 @@ namespace FootyStatMVC1.Models.FootyStat.Init
         public XmlConfig()
         {
 
-            string base_dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            //string temp_str = AppDomain.CurrentDomain.BaseDirectory;
+            //System.Diagnostics.Debug.WriteLine("BOBA FETT");
+
+            //System.Diagnostics.Debug.WriteLine(temp_str);
+
+            //string base_dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            string base_dir = AppDomain.CurrentDomain.BaseDirectory;
 
             string full_dir = base_dir + "\\App_Data";
 
