@@ -1,0 +1,113 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+
+<xsd:annotation>
+  <xsd:documentation xml:lang="en">
+    FootyStat schema definition (Jul 29th 2013)
+  </xsd:documentation>
+</xsd:annotation>
+
+<xsd:element name="footyStat" type="footyStatType"/>
+
+<xsd:complexType name="footyStatType">
+  <xsd:sequence>
+    <xsd:element name="gameRow" minOccurs="1" maxOccurs="unbounded" type="gameRowType"/>
+  </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="gameRowType">
+    <xsd:sequence>
+      <xsd:element name="season" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Season" descStr = "Premier League Season"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="teamName" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Team Name" descStr = "Premier League Team Name (3 letter Acronym)"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+
+      <xsd:element name="playerSurname" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Player Surname" descStr = "Player Surname"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="goalScdTeam" type="xsd:positiveInteger">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Goals scored by players team" descStr = "Goals conceded by the players team"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="goalAggTeam" type="xsd:positiveInteger">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Goals conceded by players team" descStr = "Goals conceded by the players team"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="oppName" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Opposition Team Name" descStr = "Name of the opposing team"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="goalScdPlayer" type="xsd:positiveInteger">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Goals scored" descStr = "Goals scored by the player"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="minsPlayed" type="xsd:positiveInteger">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Minutes played" descStr = "Minutes played by the player"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="homeAway" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Home or Away" descStr = "Whether this game was played at home or away"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="Gameweek" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Game Week" descStr = "Which Game Week this was played in"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+      <xsd:element name="assistsPlayer" type="xsd:positiveInteger">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <node displayStr = "Player Assists" descStr = "Assists contributed by the player"/>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+
+
+    </xsd:sequence>
+</xsd:complexType>
+
+</xsd:schema>

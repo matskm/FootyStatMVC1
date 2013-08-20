@@ -1,0 +1,424 @@
+﻿@model FootyStatMVC1.Controllers.PlayerStatController.PlayerStatViewModel
+
+@{
+    ViewBag.Title = "SelectPlayer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<body>
+
+   <!-- Begin Wrapper -->
+   <div id="wrapper">
+   
+         <!-- Begin Header -->
+         <div id="header">
+		 
+		       This is the Header		 
+			   
+		 </div>
+		 <!-- End Header -->
+		 
+		 <!-- Begin Navigation -->
+         <div id="navigation">
+		 
+		       This is the Navigation		 
+			   
+		 </div>
+		 <!-- End Navigation -->
+		 
+         <!-- Begin Faux Columns -->
+		 <div id="faux">
+		 
+		       <!-- Begin Left Column -->
+		       <div id="leftcolumn">
+		 
+                   <h2>Contraints:</h2>
+
+                   <form action="/PlayerStat/ApplyConstraints" method="post">
+
+		               <div class="editor-field">  
+                           <fieldset>
+                            <legend>Home or Away</legend>
+                              <div id="home-away-buttons">
+                                  @Html.RadioButtonFor(e => e.haCVM.IsHome, true, new { id = "home-true" })
+                                  @Html.Label("home-true", "Home")
+
+                                  @Html.RadioButtonFor(e => e.haCVM.IsHome, false, new { id = "home-false" })
+                                  @Html.Label("home-false", "Away")
+                              </div>
+
+                              <div id="home-away-disable-buttons">
+                                  @Html.RadioButtonFor(e => e.haCVM.active, false, new { id = "hw-active-false" })
+                                  @Html.Label("hw-active-false", "Disable")
+
+                                  @Html.RadioButtonFor(e => e.haCVM.active, true, new { id = "hw-active-true" })
+                                  @Html.Label("hw-active-true", "Enable")
+                              </div>
+                           </fieldset>
+                       </div>
+
+
+                       <div class="editor-field">  
+                           <fieldset>
+                            <legend>Gameweek</legend>
+                              <div id="gameweek-fields">
+                              
+                                    <div class="editor-label">
+                                        @Html.LabelFor(e => e.gwCVM.min)
+                                    </div>
+                                    <div class="editor-field">
+                                        @Html.EditorFor(e => e.gwCVM.min, new { id = "gw-min" })
+                                        @Html.ValidationMessageFor(e => e.gwCVM.min)
+                                    </div>
+
+                                  <div class="editor-label">
+                                        @Html.LabelFor(e => e.gwCVM.max)
+                                    </div>
+                                    <div class="editor-field">
+                                        @Html.EditorFor(e => e.gwCVM.max, new { id = "gw-max" })
+                                        @Html.ValidationMessageFor(e => e.gwCVM.max)
+                                    </div>
+
+
+                              </div>
+
+                              <div id="gameweek-disable-buttons">
+                                  @Html.RadioButtonFor(e => e.gwCVM.active, false, new { id = "gw-active-false" })
+                                  @Html.Label("gw-active-false", "Disable")
+
+                                  @Html.RadioButtonFor(e => e.gwCVM.active, true, new { id = "gw-active-true" })
+                                  @Html.Label("gw-active-true", "Enable")
+                              </div>
+                           </fieldset>
+                       </div>
+
+
+
+
+                       <div class="editor-field">  
+                           <fieldset>
+                            <legend>Minimum Minutes Played</legend>
+                              <div id="minsplayed-fields">
+                              
+                                    <div class="editor-label">
+                                        @Html.LabelFor(e => e.mpCVM.val)
+                                    </div>
+                                    <div class="editor-field">
+                                        @Html.EditorFor(e => e.mpCVM.val, new { id = "mp-val" })
+                                        @Html.ValidationMessageFor(e => e.mpCVM.val)
+                                    </div>
+
+                                    
+
+
+                              </div>
+
+                              <div id="minsplayed-disable-buttons">
+                                  @Html.RadioButtonFor(e => e.mpCVM.active, false, new { id = "mp-active-false" })
+                                  @Html.Label("mp-active-false", "Disable")
+
+                                  @Html.RadioButtonFor(e => e.mpCVM.active, true, new { id = "mp-active-true" })
+                                  @Html.Label("mp-active-true", "Enable")
+                              </div>
+                           </fieldset>
+                       </div>
+
+
+
+
+
+		 
+
+
+
+
+
+
+
+                       
+
+
+
+
+
+
+
+                       <input type="submit" value="Apply Constraints" name="action:ApplyConstraints" />
+                   </form>
+
+
+
+
+		       </div>
+		       <!-- End Left Column -->
+		 
+		       <!-- Begin Right Column -->
+		       <div id="rightcolumn">
+		       
+                   <h2>SelectPlayer</h2>
+                   <div class="indicesFloat">
+                       <form action="/PlayerStat/ChosenSeason" method="post">
+                          <fieldset>
+                               <legend>Select Season</legend>
+                               <div class="editor-field">
+                                   @Html.LabelFor(m => m.selected_seasonIndex)
+                                   
+                                   
+                                   @if (Model.selected_seasonIndex == null)
+                                   {
+                                     @Html.DropDownListFor(m => m.selected_seasonIndex, Model.seasonIndex_select_list)
+                                     @Html.ValidationMessageFor(m => m.selected_seasonIndex)
+                                   }
+                                   else
+                                   {
+                                      <p>@Model.selected_seasonIndex</p>   
+                                   }
+                                       
+                               </div>
+
+                              @if (Model.selected_seasonIndex == null)
+                              {
+                               <p>
+                                   <input type="submit" value="Choose Season" name="action:ChosenSeason" />
+                               </p>
+                              }
+                           </fieldset>
+                       </form>
+                   </div>
+
+                  
+                   <div class="indicesFloat">
+                       <form action="/PlayerStat/ChosenTeam" method="post">
+                       <fieldset>
+                           <legend>Select Team</legend>
+                               <div class="editor-field">
+                                   @Html.LabelFor(m => m.selected_teamNameIndex)
+
+
+                                   @if (Model.selected_teamNameIndex == null)
+                                   {
+                                     @Html.DropDownListFor(m => m.selected_teamNameIndex, Model.teamNameIndex_select_list)
+                                     @Html.ValidationMessageFor(m => m.selected_teamNameIndex)
+                                   }
+                                   else
+                                   {
+                                      <p>@Model.selected_teamNameIndex</p>   
+                                   }
+                                       
+                               </div>
+
+                              @if (Model.selected_teamNameIndex == null)
+                              {
+                               <p>
+                                   <input type="submit" value="Choose team name" name="action:ChosenTeam" />
+                               </p>
+                              }
+ 
+                       </fieldset>
+                       </form>
+                   </div>
+
+
+                   <div class="indicesFloat">
+                       <form action="/PlayerStat/ChosenPlayer" method="post">
+                       <fieldset>
+                           <legend>Select Player</legend>
+                               <div class="editor-field">
+                                   @Html.LabelFor(m => m.selected_playerNameIndex)
+
+
+
+                                   @if (Model.selected_playerNameIndex == null)
+                                   {
+                                     @Html.DropDownListFor(m => m.selected_playerNameIndex, Model.playerNameIndex_select_list)
+                                     @Html.ValidationMessageFor(m => m.selected_playerNameIndex)
+                                   }
+                                   else
+                                   {
+                                      <p>@Model.selected_playerNameIndex</p>   
+                                   }
+                                       
+                               </div>
+
+                              @if (Model.selected_playerNameIndex == null)
+                              {
+                               <p>
+                                   <input type="submit" value="Choose player name" name="action:ChosenPlayer" />
+                               </p>
+                              }
+
+
+                       </fieldset>
+                       </form>
+                   </div>
+
+
+                   @*<div class="indicesFloat">
+                       <h3>Player Goals</h3>
+                      
+                           @if (Model.player_goals != null)
+                           {
+                               @Model.player_goals
+                           }
+
+                       
+                   </div>*@
+
+                   <div class="clear"></div>
+
+                   @*Player stats below*@
+                   <h2>Player Stats</h2>
+                   <div class="floatleftSmallCol">
+                       <p>Stat Name</p>
+
+                       @if (Model.statsVM != null)
+                       {
+                           <p>Player Goals</p>
+                           <p>Player Assists</p>
+                           
+                       }
+
+                   </div>
+                   <div class="floatleftSmallCol">
+                       <p>Stat Value</p>
+
+                       @if (Model.statsVM != null)
+                       {
+                           
+                           <p>@Model.statsVM.goals</p>
+                           <p>@Model.statsVM.assists</p>
+                       }
+
+                   </div>
+
+
+
+
+                   
+			   
+		       </div>
+		       <!-- End Right Column -->
+			   
+			   <div class="clear"></div>
+			   
+         </div>	   
+         <!-- End Faux Columns --> 
+		 
+   </div>
+   <!-- End Wrapper -->
+
+
+<script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui.unobtrusive-2.1.0.min.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+@*<link href="@Url.Content("~/Content/themes/ui-lightness/jquery-ui.css")" rel="stylesheet" type="text/css" />*@
+
+
+<script type="text/javascript">
+    $("#home-away-buttons").buttonset();
+    $("#home-away-disable-buttons").buttonset();
+
+    
+
+    
+
+    // Main script to run after page loaded
+    $(document).ready(function () {
+
+        scan_disable_hw();
+        scan_disable_gw();
+        scan_disable_mp();
+
+        // Home Away
+        $("#hw-active-false").click(function () {
+            scan_disable_hw();
+        });
+
+        $("#hw-active-true").click(function () {
+            scan_disable_hw();
+        });
+
+
+        // Gameweek
+        $("#gw-active-false").click(function () {
+            scan_disable_gw();
+        });
+
+        $("#gw-active-true").click(function () {
+            scan_disable_gw();
+        });
+
+        // Minsplayed
+        $("#mp-active-false").click(function () {
+            scan_disable_mp();
+        });
+
+        $("#mp-active-true").click(function () {
+            scan_disable_mp();
+        });
+
+
+
+    });
+
+
+    function scan_disable_hw() {
+
+        if (document.getElementById('hw-active-false').checked) {
+            $("#home-away-buttons > input:radio").button({ disabled: true });
+        } else if (document.getElementById('hw-active-true').checked) {
+            $("#home-away-buttons > input:radio").button({ disabled: false });
+        }
+
+    }
+
+
+    function scan_disable_gw() {
+
+        if (document.getElementById('gw-active-false').checked) {
+            $("#gwCVM_min").prop('disabled', true);
+            $("#gwCVM_max").prop('disabled', true);
+        } else if (document.getElementById('gw-active-true').checked) {
+            $("#gwCVM_min").prop('disabled', false);
+            $("#gwCVM_max").prop('disabled', false);
+        }
+
+    }
+
+    function scan_disable_mp() {
+
+        if (document.getElementById('mp-active-false').checked) {
+            $("#mpCVM_val").prop('disabled', true);
+            
+        } else if (document.getElementById('mp-active-true').checked) {
+            $("#mpCVM_val").prop('disabled', false);
+           
+        }
+
+    }
+
+
+</script>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

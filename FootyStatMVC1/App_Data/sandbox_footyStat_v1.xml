@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<footyStat>
+
+<gameRow>
+ <season>2012-2013</season>
+ <teamName>MNU</teamName>
+ <playerSurname>Rooney</playerSurname>
+ <goalScdTeam>2</goalScdTeam>
+ <goalsAggTeam>0</goalsAggTeam>
+ <oppName>CHE</oppName>
+ <goalsScdPlayer>1</goalsScdPlayer>
+ <minsPlayed>90</minsPlayed>
+ <homeAway>H</homeAway>
+ <Gameweek>10</Gameweek>
+ <assistsPlayer>0</assistsPlayer>
+</gameRow>
+
+<gameRow>
+ <season>2012-2013</season>
+ <teamName>MNU</teamName>
+ <playerSurname>Valencia</playerSurname>
+ <goalScdTeam>5</goalScdTeam>
+ <goalsAggTeam>0</goalsAggTeam>
+ <oppName>CHE</oppName>
+ <goalsScdPlayer>2</goalsScdPlayer>
+ <minsPlayed>90</minsPlayed>
+ <homeAway>A</homeAway>
+  <Gameweek>10</Gameweek>
+  <assistsPlayer>0</assistsPlayer>
+</gameRow>
+
+<gameRow>
+ <season>2011-2012</season>
+ <teamName>MNU</teamName>
+ <playerSurname>Kagawa</playerSurname>
+ <goalScdTeam>2</goalScdTeam>
+ <goalsAggTeam>0</goalsAggTeam>
+ <oppName>CHE</oppName>
+ <goalsScdPlayer>2</goalsScdPlayer>
+ <minsPlayed>90</minsPlayed>
+ <homeAway>H</homeAway>
+  <Gameweek>10</Gameweek>
+  <assistsPlayer>0</assistsPlayer>
+</gameRow>
+
+<gameRow>
+ <season>2011-2012</season>
+ <teamName>WBA</teamName>
+ <playerSurname>Morrison</playerSurname>
+ <goalScdTeam>2</goalScdTeam>
+ <goalsAggTeam>0</goalsAggTeam>
+ <oppName>SWA</oppName>
+ <goalsScdPlayer>2</goalsScdPlayer>
+ <minsPlayed>90</minsPlayed>
+ <homeAway>A</homeAway>
+  <Gameweek>10</Gameweek>
+  <assistsPlayer>0</assistsPlayer>
+</gameRow>
+
+<gameRow>
+ <season>2010-2011</season>
+ <teamName>ARS</teamName>
+ <playerSurname>Van Persie</playerSurname>
+ <goalScdTeam>2</goalScdTeam>
+ <goalsAggTeam>0</goalsAggTeam>
+ <oppName>CHE</oppName>
+ <goalsScdPlayer>2</goalsScdPlayer>
+ <minsPlayed>70</minsPlayed>
+ <homeAway>H</homeAway>
+  <Gameweek>10</Gameweek>
+  <assistsPlayer>1</assistsPlayer>
+</gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>NCL</oppName>
+    <goalsScdPlayer>3</goalsScdPlayer>
+    <minsPlayed>60</minsPlayed>
+    <homeAway>H</homeAway>
+    <Gameweek>11</Gameweek>
+    <assistsPlayer>0</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>AVL</oppName>
+    <goalsScdPlayer>2</goalsScdPlayer>
+    <minsPlayed>90</minsPlayed>
+    <homeAway>A</homeAway>
+    <Gameweek>12</Gameweek>
+    <assistsPlayer>0</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>LIV</oppName>
+    <goalsScdPlayer>3</goalsScdPlayer>
+    <minsPlayed>60</minsPlayed>
+    <homeAway>H</homeAway>
+    <Gameweek>13</Gameweek>
+    <assistsPlayer>1</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>EVE</oppName>
+    <goalsScdPlayer>1</goalsScdPlayer>
+    <minsPlayed>90</minsPlayed>
+    <homeAway>A</homeAway>
+    <Gameweek>14</Gameweek>
+    <assistsPlayer>1</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>HULL</oppName>
+    <goalsScdPlayer>3</goalsScdPlayer>
+    <minsPlayed>30</minsPlayed>
+    <homeAway>H</homeAway>
+    <Gameweek>15</Gameweek>
+ <assistsPlayer>0</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>CAR</oppName>
+    <goalsScdPlayer>1</goalsScdPlayer>
+    <minsPlayed>90</minsPlayed>
+    <homeAway>A</homeAway>
+    <Gameweek>16</Gameweek>
+    <assistsPlayer>2</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>WHM</oppName>
+    <goalsScdPlayer>2</goalsScdPlayer>
+    <minsPlayed>70</minsPlayed>
+    <homeAway>H</homeAway>
+    <Gameweek>17</Gameweek>
+    <assistsPlayer>0</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>SUN</oppName>
+    <goalsScdPlayer>3</goalsScdPlayer>
+    <minsPlayed>80</minsPlayed>
+    <homeAway>A</homeAway>
+    <Gameweek>18</Gameweek>
+    <assistsPlayer>1</assistsPlayer>
+  </gameRow>
+
+  <gameRow>
+    <season>2010-2011</season>
+    <teamName>ARS</teamName>
+    <playerSurname>Van Persie</playerSurname>
+    <goalScdTeam>3</goalScdTeam>
+    <goalsAggTeam>0</goalsAggTeam>
+    <oppName>WIG</oppName>
+    <goalsScdPlayer>3</goalsScdPlayer>
+    <minsPlayed>90</minsPlayed>
+    <homeAway>H</homeAway>
+    <Gameweek>19</Gameweek>
+    <assistsPlayer>0</assistsPlayer>
+  </gameRow>
+  
+</footyStat>
