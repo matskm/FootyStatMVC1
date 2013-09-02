@@ -40,10 +40,10 @@ namespace FootyStatMVC1.Models.FootyStat.Init
             //string base_dir = AppDomain.CurrentDomain.BaseDirectory;
 
             // To work on local machine:
-            string full_dir = base_dir + "\\App_Data";
+            //string full_dir = base_dir + "\\App_Data";
             
             // To work on AppHarbor:
-            //string full_dir = base_dir;
+            string full_dir = base_dir;
 
             xsdFilename = full_dir + "\\footyStat_xml_schema_v1.xsd";
             xsdFieldBlockName = "gameRowType";
