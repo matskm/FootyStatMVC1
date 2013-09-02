@@ -46,10 +46,7 @@ namespace FootyStatMVC1.Models.FootyStat.Filters
             decision = kBehaviour.keepIf(r.row[field.address()], new SingleCutVal(val));
         }
 
-        public override void print_me()
-        {
-            // Stuff here
-        }//print_me
+        
 
     }
 }

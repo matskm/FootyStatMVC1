@@ -124,7 +124,7 @@ namespace FootyStatMVC1.Models.FootyStat.Init
 
                                 // Add field to the dictionary
                                 // NOTE: one of the few accesses to a SnapView data member.
-                                return_dict.dict.Add(f);
+                                return_dict.Add(f);
 
 
                             }//foreach
@@ -147,9 +147,7 @@ namespace FootyStatMVC1.Models.FootyStat.Init
             }//foreach (loop over xsd top level elements)
 
 
-            // Test the field dictionary by printing it out:
-            Console.WriteLine("Test of the FieldDictionary");
-            return_dict.print_me();
+            
 
             return return_dict;
 
@@ -210,9 +208,7 @@ namespace FootyStatMVC1.Models.FootyStat.Init
 
             }//foreach loop over rows
 
-            // Test snapview constructor by printing table
-
-            sv.print_table();
+            
         }
 
         // Main parent method which calls the other methods

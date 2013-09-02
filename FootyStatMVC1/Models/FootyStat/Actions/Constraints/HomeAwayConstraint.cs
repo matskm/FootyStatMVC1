@@ -14,10 +14,15 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
 
         // Hardwire this to KeepIfEquals because HomeAway constraint
         // always operates like this
-        public HomeAwayConstraint(Field f, HomeAway ha)
+        public HomeAwayConstraint(Field f, string choice)
             : base(f, new KeepIfEquals() )
         {
-            value = ha;
+            HomeAway ha_enum;
+
+            if (choice == "H") ha_enum = HomeAway.Home;
+            else ha_enum = HomeAway.Away;
+            
+            value = ha_enum;
 
             // Default to pass
             decision = true;
@@ -38,10 +43,7 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
             decision = kBehaviour.keepIf(r.row[field.address()], new SingleCutVal(HA_arr[(int)value]));
         }
 
-        public override void print_me()
-        {
-            // Stuff here
-        }//print_me
+        
 
         // Helper array matching the data format (data dependency here)
         string[] HA_arr;
@@ -49,4 +51,21 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
     }
 
     public enum HomeAway { Home, Away };
+
+
+    // Adapter
+    public class HomeAwayConstraintAdapter
+    {
+        public HomeAwayConstraintAdapter(Field f, bool IsHome)
+        {
+            string choice;
+            if(IsHome)choice="H";
+            else choice="A";
+
+            adaptee = new HomeAwayConstraint(f, choice);
+        }
+
+        public HomeAwayConstraint adaptee { get; private set; }
+    }
+
 }

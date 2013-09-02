@@ -12,48 +12,27 @@ using System.ComponentModel.DataAnnotations;
 using FootyStatMVC1.Models.FootyStat.Actions.Constraints;
 using FootyStatMVC1.Models.FootyStat.Mediator;
 using FootyStatMVC1.Controllers.ConstraintViewModels;
+using FootyStatMVC1.Models.FootyStat.Factory;
+using FootyStatMVC1.Models.FootyStat.Factory.Inputs;
+using FootyStatMVC1.Models.FootyStat.SnapViewCommand.Strategies;
+using System.Reflection;
+
+using MCFactory = FootyStatMVC1.Models.FootyStat.Factory.MCFactoryWrapper;
 
 namespace FootyStatMVC1.Controllers
 {
     public class PlayerStatController : Controller
     {
 
-        
-
         public class PlayerStatViewModel
         {
-            // Constructors
-            //public PlayerStatViewModel(List<string> idx_season)
-            //{
-            //    this.seasonIndex = idx_season;
-            //    // Initialise the teamName index to empty
-            //    this.teamNameIndex = new List<string>(10);
-            //    // Same for playerName
-            //    this.playerNameIndex = new List<string>(10);
-            //}
-            
-            //public PlayerStatViewModel(List<string> idx_season, List<string> idx_teamName)
-            //{
-            //    this.seasonIndex = idx_season;
-            //    this.teamNameIndex = idx_teamName;
-            //    this.playerNameIndex = new List<string>(10);
-            //}
 
-            //public PlayerStatViewModel(List<string> idx_season, List<string> idx_teamName, List<string> idx_playerName, double pg)
-            //{
-            //    this.seasonIndex = idx_season;
-            //    this.teamNameIndex = idx_teamName;
-            //    this.playerNameIndex = idx_playerName;
+            public PlayerStatViewModel(List<string> idx_season,
+                                        List<string> idx_teamName = null,
+                                        List<string> idx_playerName = null,
 
-            //    this.player_goals = pg;
-            //}
-
-            public PlayerStatViewModel(List<string> idx_season, 
-                                        List<string> idx_teamName = null, 
-                                        List<string> idx_playerName = null, 
-                                        
-                                        string sel_season = null, 
-                                        string sel_teamName = null, 
+                                        string sel_season = null,
+                                        string sel_teamName = null,
                                         string sel_playerName = null,
                                         CurrentPlayerStatsViewModel cpsVM = null
                                         )
@@ -68,7 +47,7 @@ namespace FootyStatMVC1.Controllers
                 if (playerNameIndex == null) playerNameIndex = new List<string>();
 
 
-                
+
 
                 this.selected_seasonIndex = sel_season;
                 this.selected_teamNameIndex = sel_teamName;
@@ -79,10 +58,9 @@ namespace FootyStatMVC1.Controllers
 
                 // Defaults to inactive constraints
                 haCVM = new HomeAwayCVM();
-
                 gwCVM = new GameweekCVM();
-
                 IsHome = false;
+                mpCVM = new MinsPlayedCVM();
 
             }
 
@@ -92,29 +70,33 @@ namespace FootyStatMVC1.Controllers
             public PlayerStatViewModel()
             {
 
+                init_index_lists();
             }
 
-            
+            void init_index_lists()
+            {
+                seasonIndex = new List<string>();
+                teamNameIndex = new List<string>();
+                playerNameIndex = new List<string>();
+            }
 
-
-
-
-
-            // Constraint section (must break this out into another class)
-
-
+            // Constraint section (must break this out into another class...)
 
             public HomeAwayCVM haCVM { get; set; }
-            
+
             public GameweekCVM gwCVM { get; set; }
 
             public MinsPlayedCVM mpCVM { get; set; }
 
             public bool IsHome { get; set; }
 
-            
+
+
+
+
+
             // Player stats view model
-            public CurrentPlayerStatsViewModel statsVM {get; set;}
+            public CurrentPlayerStatsViewModel statsVM { get; set; }
 
 
 
@@ -125,7 +107,7 @@ namespace FootyStatMVC1.Controllers
             // Get a SelectList version of the list
             public IEnumerable<SelectListItem> seasonIndex_select_list
             {
-                get 
+                get
                 {
                     // Cunning lambda expression where both Text and Value are set to the same string
                     // and a SelectListItem created from this (later I may choose to implement a "Season" class which breaks generic-ness)
@@ -165,24 +147,46 @@ namespace FootyStatMVC1.Controllers
             }
 
 
+            // Loop over the constraint properties
+            public void loop_over_constraintVM(SnapViewDirector svd)
+            {
+
+                // Loop over properties in ViewModel looking for BaseConstraintViewModel objects
+                foreach (var prop in typeof(PlayerStatViewModel).GetProperties())
+                {
+                    if (prop.GetValue(this) is BaseConstraintViewModel)
+                    {
+                        BaseConstraintViewModel bvm = (BaseConstraintViewModel)prop.GetValue(this);
+
+                        // Generate a concrete ConstraintMC based on this viewmodel 
+                        //  Two purposes for this:
+                        //      i) Use it to search for an exisiting Constraint in the svd
+                        //     ii) If this constraint is active in the viewmodel, this new MC will be attached to the svd
+                        ConstraintMC cmc_vm = bvm.generate_ConstraintMC(svd);
+
+                        // Search for ConstraintMC matching this one - look for underlying action type matching.
+                        ConstraintMC cmc_svd = svd.get_matching_ConstraintMC(cmc_vm);
+
+                        // If we found a ConstraintMC with the same underlying Constraint
+                        // then detach it from the svd to prepare for the new one. 
+                        // Or we don't need a constraint of this type at all if this constraint is disabled in the viewmodel
+                        // In either case we need to detach it.
+                        if (cmc_svd != null) svd.Detach(cmc_svd);
+
+                        // Now the existing svd version is detached if found, we attach the new one if needed
+                        if (bvm.active) svd.Attach(cmc_vm);
+
+                    }//if BaseConstraintViewModel
+                }//foreach
+            }//method
+
         }// PlayerStatViewModel
-        
-        
-        
 
 
 
 
 
-
-
-
-
-
-
-        
-        //
-        // GET: /PlayerStat/
+        // Helper methods
 
         public SnapViewDirector get_svd()
         {
@@ -194,302 +198,54 @@ namespace FootyStatMVC1.Controllers
             return View();
         }
 
-
-        double get_total_player_goals()
-        {
-            return get_total_player_number_stat("goalScdPlayer");
-        }
-
-        double get_total_player_assists()
-        {
-            return get_total_player_number_stat("assistsPlayer");
-        }
-
-
-        // Iterate over the view and get the goals.
-        double get_total_player_number_stat(string stat_field_name)
-        {
-            
-            // First look for a TotallingAction in the SVD using the stat_field_name field. If it doesn't exist - remake it.
-            // NEED TO THINK CAREFULLY AGAIN HERE: SHOULD THIS BE VALID/INVALID at some point?
-            SnapViewDirector svd = FootyStatMVC1.FootyStatInit.get_svd();
-            TotallingAction ta = svd.pullOutTotallingAction(stat_field_name);
-            if (ta != null)
-            {
-                return ta.total;
-            }
-            // Else have to redo the calculation
-            else
-            {
-                TotallingMC tmc = make_TA(stat_field_name);
-
-                get_svd().AddRegistrationCandidate(tmc);
-                get_svd().RegisterCandidates();
-
-                
-
-
-                // NOT de-registering this ... so should hang around
-                // NEED TO THINK CAREFULLY ABOUT THIS - WHEN TO DE-REGISTER
-                //tmc.remove_me();
-
-                TotallingAction ta2 = (TotallingAction)tmc.get_action();
-                
-
-
-                return ta2.total;
-            }
-        }
-
-        void filter_on_playerName(string playerName_choice)
-        {
-            string filter_field_name = "playerSurname";
-
-            // Register a filter on the season column picking out the selected season
-            FilterMC fmc = make_filter(filter_field_name, playerName_choice);
-
-            get_svd().AddRegistrationCandidate(fmc);
-            get_svd().RegisterCandidates();
-
-            
-
-            // Don't need this filter or index anymore, so remove it.
-            get_svd().Detach(fmc);
-            
-        }
-
-
-        // Feels like yet another helper which should live somewhere else...
-        List<string> getplayerNameIndex(string season_choice)
-        {
-            string idx_field_name = "playerSurname";
-            string filter_field_name = "teamName";
-            List<string> rtn_idx = null;
-
-            if (!get_field(idx_field_name).check_and_get_index(ref rtn_idx))
-            {
-
-                // This is all getting the playerName index...
-                IndexMC tia = make_index(idx_field_name);
-                get_svd().AddRegistrationCandidate(tia);
-
-                // Register a filter on the season column picking out the selected season
-                FilterMC fmc = make_filter(filter_field_name, season_choice);
-                get_svd().AddRegistrationCandidate(fmc);
-               
-                
-                
-                get_svd().RegisterCandidates();
-
-                
-
-                // Don't need this filter or index anymore, so remove it.
-                
-                get_svd().Detach(fmc);
-                get_svd().Detach(tia);
-
-                rtn_idx = get_idx_str(tia);
-
-                // cache in the field
-                cache_index(idx_field_name, (IndexingAction)tia.get_action());
-
-            }//if
-
-
-
-            return rtn_idx;
-
-        }
-
-
-
-
-
-
-        // Feels like yet another helper which should live somewhere else...
-        List<string> getTeamNameIndex(string season_choice)
-        {
-            string idx_field_name = "teamName";
-            string filter_field_name = "season";
-            List<string> rtn_idx = null;
-
-            if (!get_field(idx_field_name).check_and_get_index(ref rtn_idx))
-            {
-
-                // This is all getting the teamName index...
-                IndexMC tia = make_index(idx_field_name);
-                get_svd().AddRegistrationCandidate(tia);
-
-
-                // Register a filter on the season column picking out the selected season
-                FilterMC fmc = make_filter(filter_field_name, season_choice);
-                get_svd().AddRegistrationCandidate(fmc);
-
-                get_svd().RegisterCandidates();
-
-                
-
-                // Don't need this filter or index anymore, so remove it.
-               
-                get_svd().Detach(fmc);
-                get_svd().Detach(tia);
-
-                rtn_idx = get_idx_str(tia);
-
-                // cache in the field
-                cache_index(idx_field_name, (IndexingAction)tia.get_action());
-
-            }//if
-
-
-
-            return rtn_idx;
-
-        }
-
-        void cache_index(string field_name, IndexingAction idx)
-        {
-            Field f = get_field(field_name);
-            f.set_index(idx);
-        }
-
-
-        // Helper to get Field
-        Field get_field(string field_name)
-        {
-            return FootyStatInit.get_snapview().findInDict(field_name);
-        }
-
-
-        // Helper to get the season index
-        // Should this live somewhere else too????
-        List<string> getSeasonIndex()
-        {
-            string idx_field_name = "season";
-            List<string> rtn_idx = null;
-            
-            // Check the field for a cached version first
-            // If there is a cached version, this line puts it in rtn_idx
-            if (!get_field(idx_field_name).check_and_get_index(ref rtn_idx))
-            {
-
-                IndexMC imc = make_index(idx_field_name);
-                get_svd().AddRegistrationCandidate(imc);
-
-                get_svd().RegisterCandidates();
-
-                // Remove this to be tidy.
-                
-                get_svd().Detach(imc);
-
-                rtn_idx = get_idx_str(imc);
-
-                // cache in the field
-                cache_index(idx_field_name, (IndexingAction)imc.get_action());
-
-            }
-            
-            return rtn_idx;
-
-        }// getSeasonIndex
-
-        // Helper to pull out the List<string> of index values
-        List<string> get_idx_str(IndexMC imc)
-        {
-            IndexingAction ia = (IndexingAction)imc.get_action();
-            return ia.getStrLst();
-        }
-
-        // Helper to register a new index action with the SVD
-        // This should also live somewhere else....
-        IndexMC make_index(string field_name)
-        {
-            Field f = get_field(field_name);
-            IndexMC imc = new IndexMC(FootyStatMVC1.FootyStatInit.get_svd(), new IndexingAction(f));
-            return imc;
-        }
-
-        // Helper to register a filter:
-        //   - field_name is which field we are filtering
-        //   - choice is the particular value of this column we are selecting
-        FilterMC make_filter(string field_name, string choice)
-        {
-            Field f = get_field(field_name);
-            StringEqualsFilter season_filter = new StringEqualsFilter(field_name, f, choice);
-            // Create new filtering colleague, and register with director
-            FilterMC fmc = new FilterMC(FootyStatMVC1.FootyStatInit.get_svd(), season_filter);
-            
-            
-            return fmc;
-        }
-
-
-        TotallingMC make_TA(string field_name)
-        {
-            return new TotallingMC(
-                                   FootyStatMVC1.FootyStatInit.get_svd(), 
-                                   new TotallingAction(get_field(field_name))
-                                   );
-        }
-
-
-
         string get_fieldChoice(string field_name)
         {
-            Field f = get_field(field_name);
-            if (f.projectedOut) return f.projectedVal;
-            else return null;
+            //Field f = get_field(field_name);
+            //if (f.projectedOut) return f.projectedVal;
+            //else return null;
+            
+            // Get this via svd and IndexMC 
+            List<string> idx = get_svd().get_index(field_name);
+            if (idx.Count != 1)
+            {
+                // throw exception - this shouldn't be > 1, because the index should be degenerate.
+                // if this does fire, its because we're looking for a "single valued" index (i.e., choice) but the index is 
+                // not single valued (i.e., size>1)
+                return null;
+            }
+            else
+            {
+                return idx[0];
+            }
         }
 
         string get_seasonChoice()
         {
-            return get_fieldChoice("season");
+            return get_fieldChoice(FieldDictionary.fname_season);
         }
 
         string get_teamNameChoice()
         {
-            return get_fieldChoice("teamName");
+            return get_fieldChoice(FieldDictionary.fname_teamName);
         }
 
         string get_playerNameChoice()
         {
-            return get_fieldChoice("playerSurname");
+            return get_fieldChoice(FieldDictionary.fname_playerSurname);
         }
 
 
-        CurrentPlayerStatsViewModel get_statsVM()
-        {
-            double goals = get_total_player_goals();
-            double assists = get_total_player_assists();
-
-            // Make the conversion to integer as we go into the view
-            CurrentPlayerStatsViewModel statsVM = new CurrentPlayerStatsViewModel(Convert.ToInt16(goals), Convert.ToInt16(assists));
-
-            return statsVM;
         
-        }
 
         // ***************** END HELPERS
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Get version
+        // Get version of the View
         public ActionResult SelectPlayer()
         {
-            List<string> idx_list = getSeasonIndex();
+            UpdateIndex_CS cmd_strategy = new UpdateIndex_CS(get_svd());
+            List<string> idx_list = cmd_strategy.execute(FieldDictionary.fname_season);
+            
             return View(new PlayerStatViewModel(idx_list));
         }
 
@@ -515,9 +271,22 @@ namespace FootyStatMVC1.Controllers
             //if (!ModelState.IsValid)
             //    return View(viewModel);
 
-            List<string> team_idx = getTeamNameIndex(viewModel.selected_seasonIndex);
+            
+            UpdateIndexAndFilter_CS cmd_strategy = new UpdateIndexAndFilter_CS(get_svd());
+            List<string> team_idx = cmd_strategy.execute(FieldDictionary.fname_teamName, FieldDictionary.fname_season, viewModel.selected_seasonIndex);
 
-            return View("SelectPlayer", new PlayerStatViewModel(new List<string>(), team_idx, new List<string>(), viewModel.selected_seasonIndex, null, null));
+            
+
+
+
+
+            return View("SelectPlayer", new PlayerStatViewModel(new List<string>(), 
+                                                                team_idx, 
+                                                                new List<string>(), 
+                                                                viewModel.selected_seasonIndex, 
+                                                                null, 
+                                                                null)
+                                                                );
 
         }
 
@@ -529,9 +298,20 @@ namespace FootyStatMVC1.Controllers
             //if (!ModelState.IsValid)
             //    return View(viewModel);
 
-            List<string> player_idx = getplayerNameIndex(viewModel.selected_teamNameIndex);
+            //List<string> player_idx = getplayerNameIndex(viewModel.selected_teamNameIndex);
 
-            return View("SelectPlayer", new PlayerStatViewModel(new List<string>(), new List<string>(), player_idx, get_seasonChoice(), viewModel.selected_teamNameIndex, null));
+            UpdateIndexAndFilter_CS cmd_strategy = new UpdateIndexAndFilter_CS(get_svd());
+            List<string> player_idx = cmd_strategy.execute(FieldDictionary.fname_playerSurname, FieldDictionary.fname_teamName, viewModel.selected_teamNameIndex);
+
+            
+
+            return View("SelectPlayer", new PlayerStatViewModel(new List<string>(), 
+                                                                new List<string>(), 
+                                                                player_idx, 
+                                                                get_seasonChoice(), 
+                                                                viewModel.selected_teamNameIndex, 
+                                                                null)
+                                                                );
 
         }
 
@@ -543,10 +323,13 @@ namespace FootyStatMVC1.Controllers
             //if (!ModelState.IsValid)
             //    return View(viewModel);
 
-            filter_on_playerName(viewModel.selected_playerNameIndex);
+            //filter_on_playerName(viewModel.selected_playerNameIndex);
 
-            double player_goals = get_total_player_goals();
+            Filter_CS cmd_strategy1 = new Filter_CS(get_svd());
+            cmd_strategy1.execute(FieldDictionary.fname_playerSurname, viewModel.selected_playerNameIndex);
 
+            UpdateAllStats_CS cmd_strategy2 = new UpdateAllStats_CS(get_svd());
+          
             return View("SelectPlayer", new PlayerStatViewModel(
                                                                 new List<string>(), 
                                                                 new List<string>(), 
@@ -555,80 +338,22 @@ namespace FootyStatMVC1.Controllers
                                                                 get_seasonChoice(), 
                                                                 get_teamNameChoice(), 
                                                                 viewModel.selected_playerNameIndex,
-                                                                get_statsVM()
+                                                                //get_statsVM()
+                                                                cmd_strategy2.execute()
                                                                 ));
 
         }
+
         
+
 
         [HttpPost]
         [MultipleButton(Name = "action", Argument = "ApplyConstraints")]
         public ActionResult ApplyConstraints(PlayerStatViewModel viewModel)
         {
-
-            // Constraints have changed - this should either automatically trigger an iteration - 
-            // or at the very least set the chain reaction of through the SVD setting valid flag to false in snapview.
-
             
-            // Debug: pull out TotallingAction (should be only 1)
-            string stat_field_name = "goalScdPlayer";
-            SnapViewDirector svd = FootyStatMVC1.FootyStatInit.get_svd();
-            TotallingAction ta = svd.pullOutTotallingAction(stat_field_name);
-
+            UpdateConstraintsAndAllStats_CS cmd_strategy = new UpdateConstraintsAndAllStats_CS(get_svd());
             
-
-            
-
-            // Register constraints
-            if (viewModel.haCVM.active)
-            {
-                HomeAway ha_enum;
-                if(viewModel.haCVM.IsHome)ha_enum = HomeAway.Home;
-                else ha_enum = HomeAway.Away;
-                
-                ConstraintMC cmc = new ConstraintMC(FootyStatMVC1.FootyStatInit.get_svd(), new HomeAwayConstraint(get_field("homeAway"), ha_enum));
-                get_svd().AddRegistrationCandidate(cmc);
-                
-
-            }
-
-            if (viewModel.gwCVM.active)
-            {
-
-                ConstraintMC cmc = new ConstraintMC(FootyStatMVC1.FootyStatInit.get_svd(), 
-                                          new GameweekConstraint(get_field("Gameweek"), 
-                                                                 viewModel.gwCVM.min.ToString(),
-                                                                 viewModel.gwCVM.max.ToString()
-                                                                 )
-                                          );
-                get_svd().AddRegistrationCandidate(cmc);
-                
-            }
-
-            if (viewModel.mpCVM.active)
-            {
-                ConstraintMC cmc = new ConstraintMC(FootyStatMVC1.FootyStatInit.get_svd(), 
-                                          new MinsPlayedConstraint(get_field("minsPlayed"),
-                                                                   viewModel.mpCVM.val.ToString()
-                                                                   )
-                                          );
-                get_svd().AddRegistrationCandidate(cmc);
-                
-            }
-
-            // Register all the candidate MC's we have accumulated (which also triggers the snapview iterate)
-            get_svd().RegisterCandidates();
-
-
-            // De-register the constraints so the next submission of the constraints is clean
-            get_svd().remove_all_ConstraintMC();
-
-            
-            // Update the stat
-            double player_goals = get_total_player_goals();
-
-            // Meaningless comment
-
             return View("SelectPlayer", new PlayerStatViewModel(
                                         new List<string>(), 
                                         new List<string>(), 
@@ -637,7 +362,8 @@ namespace FootyStatMVC1.Controllers
                                         get_seasonChoice(), 
                                         get_teamNameChoice(), 
                                         get_playerNameChoice(),
-                                        get_statsVM()
+                                        //get_statsVM()
+                                        cmd_strategy.execute(viewModel)
                                         ));
 
         }

@@ -26,7 +26,7 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
 
         public abstract void doAction(SVRow r);
 
-        public abstract void print_me();
+        
 
         // The Field which this action operates on (provides the right address in the SVRow)
         // Make this read-only because it should never be changed.

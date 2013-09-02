@@ -1,4 +1,5 @@
 ﻿@model FootyStatMVC1.Controllers.PlayerStatController.PlayerStatViewModel
+@using FootyStatMVC1.Controllers.ConstraintViewModels
 
 @{
     ViewBag.Title = "SelectPlayer";
@@ -50,10 +51,10 @@
                               </div>
 
                               <div id="home-away-disable-buttons">
-                                  @Html.RadioButtonFor(e => e.haCVM.active, false, new { id = "hw-active-false" })
+                                  @Html.RadioButtonFor( e => e.haCVM.active, false, new { id = "hw-active-false" })
                                   @Html.Label("hw-active-false", "Disable")
 
-                                  @Html.RadioButtonFor(e => e.haCVM.active, true, new { id = "hw-active-true" })
+                                  @Html.RadioButtonFor( e => e.haCVM.active, true, new { id = "hw-active-true" })
                                   @Html.Label("hw-active-true", "Enable")
                               </div>
                            </fieldset>
@@ -67,18 +68,26 @@
                               
                                     <div class="editor-label">
                                         @Html.LabelFor(e => e.gwCVM.min)
+                                        @*@Html.LabelFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).min) *@
                                     </div>
                                     <div class="editor-field">
                                         @Html.EditorFor(e => e.gwCVM.min, new { id = "gw-min" })
                                         @Html.ValidationMessageFor(e => e.gwCVM.min)
+
+                                        @*@Html.EditorFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).min , new { id = "gw-min" })
+                                        @Html.ValidationMessageFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).min)*@
                                     </div>
 
                                   <div class="editor-label">
                                         @Html.LabelFor(e => e.gwCVM.max)
+                                        @*@Html.LabelFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).max) *@
                                     </div>
                                     <div class="editor-field">
                                         @Html.EditorFor(e => e.gwCVM.max, new { id = "gw-max" })
                                         @Html.ValidationMessageFor(e => e.gwCVM.max)
+
+                                        @*@Html.EditorFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).max, new { id = "gw-max" })
+                                        @Html.ValidationMessageFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).max)*@
                                     </div>
 
 
@@ -90,6 +99,13 @@
 
                                   @Html.RadioButtonFor(e => e.gwCVM.active, true, new { id = "gw-active-true" })
                                   @Html.Label("gw-active-true", "Enable")
+
+                                  @*@Html.RadioButtonFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).active, false, new { id = "gw-active-false" })
+                                  @Html.Label("gw-active-false", "Disable")
+
+                                  @Html.RadioButtonFor(e => (  (GameweekCVM)e.cvm_dict["GameweekConstraint"]  ).active, true, new { id = "gw-active-true" })
+                                  @Html.Label("gw-active-true", "Enable")*@
+
                               </div>
                            </fieldset>
                        </div>
@@ -381,11 +397,10 @@
     function scan_disable_gw() {
 
         if (document.getElementById('gw-active-false').checked) {
-            $("#gwCVM_min").prop('disabled', true);
-            $("#gwCVM_max").prop('disabled', true);
+            $("#gameweek-fields :input").prop('disabled', true);
+
         } else if (document.getElementById('gw-active-true').checked) {
-            $("#gwCVM_min").prop('disabled', false);
-            $("#gwCVM_max").prop('disabled', false);
+            $("#gameweek-fields :input").prop('disabled', false);
         }
 
     }
@@ -393,10 +408,10 @@
     function scan_disable_mp() {
 
         if (document.getElementById('mp-active-false').checked) {
-            $("#mpCVM_val").prop('disabled', true);
+            $("#minsplayed-fields :input").prop('disabled', true);
             
         } else if (document.getElementById('mp-active-true').checked) {
-            $("#mpCVM_val").prop('disabled', false);
+            $("#minsplayed-fields :input").prop('disabled', false);
            
         }
 

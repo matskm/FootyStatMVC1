@@ -33,62 +33,6 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
         SnapView sView;
 
 
-
-        // Access to the Index for this field (cached by the controller so we don't have to do >1 snapview iterate)
-        // NOTE: potential failure mode is assuming this is a valid index, when the snapview has changed underneath.
-        //          - Plan to build in a "valid" protection and update - probably by reorganising.
-        IndexingAction index;
-
-        public void set_index(IndexingAction i)
-        {
-            index = i;
-        }
-
-        // Pass the reference to List<string> by reference because it 
-        // needs to change!
-        public bool check_and_get_index(ref List<string> rtn_idx)
-        {
-            if (index == null)
-            {
-                rtn_idx = null;
-                return false;
-            }
-            else
-            {
-                rtn_idx = index.getStrLst();
-                return true;
-            }
-        }
-
-        public List<string> get_index()
-        {
-            if (index == null)
-            {
-                // Throw an exception
-
-                // Return an empty list for now (nasty!)
-                return new List<string>(10);
-            }
-
-            return index.getStrLst();
-        }
-
-        
-
-
-
-        // "Projected out" 
-        //     - If we have filtered the snapview on a single value (e.g., season="2011-2012") the season field
-        //       will only ever be one value (for every single row)
-        //     - Thus it will be "Projected out"
-        //     - This is "state" information which needs to be kept by the framework. Store in the field.
-        public bool projectedOut { get; set; }
-        // Holds the projected out value if we have been projected out
-        public string projectedVal { get; set; }
-
-
-        
-
         // Simple constructor
         public Field(string name_val, string displayName_val, string desc_val, int rowAddress_val, SnapView sv)
         {
@@ -98,12 +42,6 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
             rowAddress = rowAddress_val;
             sView = sv;
 
-            // Initialise index to null, even though this is default to enhance readablity
-            index = null;
-
-            // Initialise proejctedOut to false
-            projectedOut = false;
-
         }//Field
 
         // Wrapper constructor for use by FieldDictionary
@@ -111,8 +49,6 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
         {
             name = name_val;
         }//Field
-
-        
 
         // Use to access the correct element of the SnapView row
         public int address()

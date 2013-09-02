@@ -15,7 +15,7 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
     public class FieldDictionary
     {
         // The internal data-structure (array of Field objects)
-        public List<Field> dict;
+         List<Field> dict;
 
         // Sorted flag.
         bool sorted = false;
@@ -29,15 +29,10 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
             fcomp = new FieldComparer();
         }
 
-        public void print_me(){
-
-            foreach(Field f in dict){
-                Console.WriteLine("  Field Name: " + f.name);
-                Console.WriteLine("  Field displayName: " + f.displayName);
-                Console.WriteLine("  Field desc: " + f.desc);
-                Console.WriteLine("  Field address: " + f.address());
-                Console.WriteLine("");
-            }//foreach
+        // Interface for adding fields
+        public void Add(Field f)
+        {
+            dict.Add(f);
         }
 
         public Field find(string s)
@@ -66,11 +61,22 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
             sorted = true;
         }//sort_table
 
+        // String literals to create one place in the code where the Field Names are defined
+        // Future: move away from string literals to another dictionary class.
+        // Disadvantage of string literals: these have to be kept synchronised with xsd meta data definitions.
+
+        static public string fname_season = "season";
+        static public string fname_teamName = "teamName";
+        static public string fname_playerSurname = "playerSurname";
+        static public string fname_goalScdTeam = "goalScdTeam";
+        static public string fname_goalAggTeam = "goalAggTeam";
+        static public string fname_oppName = "oppName";
+        static public string fname_goalScdPlayer = "goalScdPlayer";
+        static public string fname_minsPlayed = "minsPlayed";
+        static public string fname_homeAway = "homeAway";
+        static public string fname_Gameweek = "Gameweek";
+        static public string fname_assistsPlayer = "assistsPlayer";
 
     }//class
-
-
-    
-    
 
 }//nameapce

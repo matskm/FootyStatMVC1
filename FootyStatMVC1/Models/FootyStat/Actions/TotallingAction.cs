@@ -39,9 +39,7 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
             total = 0;
         }
 
-        public override void print_me()
-        {
-        }//print_me
+        
 
     }//class
 }//namespace

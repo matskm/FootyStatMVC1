@@ -7,16 +7,11 @@ using FootyStatMVC1.Models.FootyStat.SnapViewNS;
 namespace FootyStatMVC1.Models.FootyStat.Actions
 {
     // Index of all possible values of a particluar column (e.g., all team names)
-    // Base class is BaseAction
-    public class IndexingAction : BaseAction
+    // Base class is BaseAction, implments PostActionIface interface.
+    public class IndexingAction : BaseAction, InitActionIface
     {
         // The index data structure (p868 of Herb)
         SortedSet<string> set;
-
-        // Target field
-        //Field field;
-
-
 
         // Constructor
         public IndexingAction(Field f)
@@ -24,9 +19,6 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
         {
             //field = f;
             set = new SortedSet<string>(new IASetComparer());
-
-            
-            
 
         }//Constructor
 
@@ -38,6 +30,8 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
 
             // Get the Field address:
             int addr = field.address();
+            
+            // Add value at address to the index
             set.Add(r.row[addr]);
         }
 
@@ -56,6 +50,12 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
             return strArr;
         }
 
+        // Return size of index set
+        public int size()
+        {
+            return set.Count;
+        }
+
         // List version
         public List<string> getStrLst()
         {
@@ -71,16 +71,14 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
         }
 
 
-        public override void print_me()
+        // Initialisation
+        public void init()
         {
-            Console.WriteLine("IndexingAction:print_me()");
-            foreach (string s in set)
-            {
-                Console.WriteLine("   Set element: " + s);
-            }//foreach
-        }//print_me
+            // Reinitialise the set
+            set = new SortedSet<string>(new IASetComparer());
+        }
 
-
+  
     }//class
 
     // Helper comparer for the SortedSet<string>

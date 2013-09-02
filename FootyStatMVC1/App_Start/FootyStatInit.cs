@@ -21,7 +21,7 @@ namespace FootyStatMVC1
         static SnapViewDirector svd;
 
 
-        // Static getters (which create new snapview and svd if either one is null)
+        // Static getter (which create new snapview and svd if either one is null)
         public static SnapViewDirector get_svd()
         {
             if (svd != null) return svd;
@@ -32,21 +32,6 @@ namespace FootyStatMVC1
 
             }
         }
-
-        public static SnapView get_snapview()
-        {
-            if (snapview != null) return snapview;
-            else
-            {
-                init_view_and_director();
-                return snapview;
-            }
-        }
-
-
-
-
-
 
         // Create SnapView and then SnapViewDirector
         //  - Register SnapView with director.

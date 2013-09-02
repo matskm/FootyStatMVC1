@@ -22,36 +22,20 @@ namespace FootyStatMVC1.Models.FootyStat.Mediator.Colleagues
             Changed();
         }
 
-
-        
-
-
-        // Registration now managed by SVD - this is the right design as of Aug 20th. Hence these methods disabled.
-
-        //// Registration code
-        //public void register_me()
-        //{
-        //    svd.Attach(this);
-
-            
-        //}
-
-        //public void remove_me()
-        //{
-        //    svd.Detach(this);
-        //}
-
         // Valid field which will trigger recalculation in the SnapView
-        public bool isValid { get; set; }
+        // Make this virtual so sub-classes can override how this is set (see IndexMC)
+        protected bool valid;
+        public virtual bool isValid {
+            get { return valid;}
+            set { valid = value; } 
+        }//isValid
+
 
         // Changed interface
         public void Changed()
         {
             // Set our isValid flag to false
             isValid = false;
-
-            //// Call Director ColleagueChanged()
-            //svd.ColleagueChanged(this);
             
         }
 

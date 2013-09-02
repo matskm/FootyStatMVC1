@@ -32,10 +32,20 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
             decision = kBehaviour.keepIf(r.row[field.address()], new DoubleCutVal(min, max));
         }
 
-        public override void print_me()
-        {
-            // Stuff here
-        }//print_me
+        
 
-    }
+    }//class
+
+    // Adapter so that the ViewModel can generate this constraint
+    // Adapter needed because numbers in viewmodel, strings in underlying model
+    public class GameweekConstraintAdapter
+    {
+        public GameweekConstraintAdapter(Field f, int min, int max)
+        {
+            adaptee = new GameweekConstraint(f, Convert.ToString(min), Convert.ToString(max));
+        }
+
+        public GameweekConstraint adaptee { get; private set; }
+    }//class
+
 }

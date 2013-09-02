@@ -15,9 +15,9 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
     {
 
         // Strategy pattern like Filters
-        public KeepBehaviour kBehaviour;
+        protected KeepBehaviour kBehaviour;
 
-        public bool decision { get; set; }
+        public bool decision { get; protected set; }
 
         public BaseConstraint(Field f, KeepBehaviour k)
             : base(f)
@@ -37,10 +37,7 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
             // Throw an exception as this doesn't do anything
         }
 
-        public override void print_me()
-        {
-            // Throw exception
-        }
+        
 
     }
 }

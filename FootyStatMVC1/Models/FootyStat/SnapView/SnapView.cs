@@ -44,15 +44,8 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
         // Main data structure: a dynamically grow-able List of string-arrays.
         List<SVRow> table;
 
-        // Meta data (shallow copy) 
+        // Meta data for the table (Field definitions etc)
         FieldDictionary dict;
-
-        // actions (deep copy or just reinit)
-        //LinkedList<BaseAction> actions;
-
-        // filters (deep copy or just reinit)
-        //LinkedList<BaseFilter> filters;
-
 
         // ***************
         // Constructors
@@ -61,7 +54,7 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
         // Copy constructor to Clone this snapview only used by FootyStatInit to save a copy right at the start.
         public SnapView(SnapViewDirector svd, SnapView previous_sv) : base(svd)
         {
-            // Copy the table (expensive)
+            // Copy the table reference
             table = previous_sv.table;
 
             // Create FieldDictionary object
@@ -106,22 +99,6 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
             return dict.find(str);
         }//findInDict
 
-        //public void addAction(BaseAction a)
-        //{
-        //    actions.AddLast(a);
-        //}//addAction
-
-        //public void addFilter(BaseFilter f)
-        //{
-        //    filters.AddLast(f);
-        //}
-
-        // should this be public??
-        void insert_row(SVRow str_ar)
-        {
-            table.Add(str_ar);
-        }//insert_row
-
         // Add a row to the table data-structure
         public void addRow(SVRow row)
         {
@@ -142,42 +119,6 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
         // Iteration Methods
         // (iterate over the main table)
         // *****************************
-
-        // Default iteration over snapView that doesn't copy, or therefore filter. Just does the actions.
-        public void default_iterate()
-        {
-            //foreach(string [] str_ar in table){
-
-            //    // NOTE: this next little loop is very important: as we consider each row - do all the actions.
-            //    // Do the actions
-            //    foreach (BaseAction a in actions)
-            //    {
-            //        a.doAction(str_ar);
-            //    }//foreach
-
-            //}//foreach
-        }//default_iterate
-
-
-
-        void cache_projected_columns(List<MCAction> mca_list)
-        {
-            // Do this for every EqualsFilter we can find.
-
-            foreach (MCAction mca in mca_list)
-            {
-                if (mca.get_action() is EqualsFilter)
-                {
-                    EqualsFilter ef = (EqualsFilter)mca.get_action();
-                    Field f = ef.field;
-                    SVRow first_row = table[0];
-                    string val = first_row.row[f.address()];
-                    ef.cache_projected_val(val);
-                }
-            }//foreach
-
-        }
-
 
         public bool we_should_discard(List<MCAction> mca_list, SVRow svr)
         {
@@ -227,7 +168,7 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
 
 
          
-
+        // Note: could merge the two iterate methods - just put a filter switch in parameter list
         public void iterate_and_filter(List<MCAction> mca_list)
         {
             
@@ -251,20 +192,11 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
                 // "Filter" on the Constraints without actually harming the data
                 if (we_should_skip(mca_list, svr)) continue; 
 
-                // Next consider indices
+                // Next consider all other actions
                 foreach (MCAction mca in mca_list)
                 {
-
                     mca.doAction(svr);
                     
-                    //if (mca is IndexMC)
-                    //{
-                    //    IndexMC imc = (IndexMC)mca;
-                    //    imc.doAction(svr);
-                    //} 
-
-                    //// Now consider constraints ...
-
                 }//foreach
 
 
@@ -274,41 +206,11 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
             //Finally replace the table with the filtered version (note: this overwrites the table).
             table = filtered_table;
 
-            // And cache any projected out columns
-            cache_projected_columns(mca_list);
-
-            // This is now handled by the SVD iterate
-            //// And set the valid flag to true because this snapview is up to date with all its actions
-            //isValid = true;
+            
 
         }
 
-        // Iterate over table, and only keep each row if filters pass
-        public void filter_iterate(SnapView new_sv)
-        {
-
-            //// Loop over each row of the main table data structure
-            //foreach (SVRow str_ar in table)
-            //{
-
-            //    bool keep = true;
-
-            //    //// NOTE: this next little loop is very important: as we consider each row - do all the filters.
-            //    //foreach (BaseFilter f in filters)
-            //    //{
-            //    //    if (!f.try_filter(str_ar)) keep = false;
-            //    //}//foreach
-
-            //    // Now we have the right value of keep
-            //    if (keep)
-            //    {
-            //        new_sv.insert_row(str_ar);
-                    
-            //    }//if
-
-
-            //}//foreach
-        }//filter_iterate
+        
 
         // Mediator iterate version
         public void iterate(List<MCAction> mca_list)
@@ -327,12 +229,7 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
                 foreach (MCAction mca in mca_list)
                 {
 
-                    //// Next consider indices (will need to consider other kinds of actions here too]
-                    //if (mca is IndexMC)
-                    //{
-                    //    IndexMC imc = (IndexMC)mca;
-                    //    imc.doAction(svr);
-                    //}
+                    
 
                     // Now Everything else... (prob don't need the test above hence commented out)
                     mca.doAction(svr);
@@ -340,41 +237,12 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
                 }//foreach
             }//foreach
 
-            // This is now handled by the SVD iterate method
-            //// And set the valid flag to true because this snapview is up to date with all its actions
-            //isValid = true;
+            
 
         }
 
 
-        // *********************
-        // Print methods (debug)
-        // *********************
-
-        public void print_table()
-        {
-            int row_n = 0;
-            Console.WriteLine("SnapView:print_table()");
-
-            foreach (SVRow arr in table)
-            {
-                Console.WriteLine("  Row[" + row_n + "]");
-                foreach (string str in arr.row)
-                {
-                    Console.WriteLine("   " + str);
-                }//foreach
-                Console.WriteLine("");
-                row_n++;
-            }//loop over rows
-        }//print_table
-
-        //public void print_actions()
-        //{
-        //    foreach (BaseAction a in actions)
-        //    {
-        //        a.print_me();
-        //    }//foreach
-        //}//print_actions
+        
 
     }//SnapView class
 }//namespace

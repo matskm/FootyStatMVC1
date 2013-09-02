@@ -20,11 +20,11 @@ namespace FootyStatMVC1.Models.FootyStat.Filters
         //   - Equals
         //   - Greater than
         //   - Less than
-        public KeepBehaviour kBehaviour;
+        protected KeepBehaviour kBehaviour;
 
         // Decision of the filter
         // Filter decision
-        public bool decision { get; set; }
+        public bool decision { get; protected set; }
 
 
 
@@ -48,9 +48,6 @@ namespace FootyStatMVC1.Models.FootyStat.Filters
             // Throw an exception as this doesn't do anything
         }
 
-        public override void print_me()
-        {
-            // Throw exception
-        }
+        
     }
 }

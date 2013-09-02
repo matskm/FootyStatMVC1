@@ -9,6 +9,7 @@ namespace FootyStatMVC1.Models.FootyStat.Mediator.Colleagues
 {
     public class ConstraintMC : MCAction
     {
+        // >>>>>>>>>>> NOTE: because these are made in factories - should this be protected?
         // Explicitly giveing this a BaseConstraint is what makes it
         // a ConstratinMC
         public ConstraintMC(SnapViewDirector svd, BaseConstraint a)

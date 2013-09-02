@@ -27,5 +27,16 @@ namespace FootyStatMVC1.Models.FootyStat.Actions.Constraints
             decision = kBehaviour.keepIf(r.row[field.address()], new SingleCutVal(minimum));
         }
 
+    }//class
+
+    // Adapter
+    public class MinsPlayedConstraintAdapter
+    {
+        public MinsPlayedConstraintAdapter(Field f, int val)
+        {
+            adaptee = new MinsPlayedConstraint(f, Convert.ToString(val));
+        }
+
+        public MinsPlayedConstraint adaptee { get; private set; }
     }
 }

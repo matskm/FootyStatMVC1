@@ -39,13 +39,10 @@ namespace FootyStatMVC1.Models.FootyStat.Actions
         Field denom_field;
 
         public override void doAction(SVRow r){
-
+            // This class is incomplete (and unused at the moment) - doesn't have calculation code yet (hence the unused private data members)
         }
 
-        public override void print_me()
-        {
-        }//print_me
-
+        
 
 
     }//class

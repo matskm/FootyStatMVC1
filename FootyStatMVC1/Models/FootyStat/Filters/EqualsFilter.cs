@@ -23,11 +23,6 @@ namespace FootyStatMVC1.Models.FootyStat.Filters
 
         }
         
-        // Cache the projected out value
-        public void cache_projected_val(string val)
-        {
-            field.projectedOut = true;
-            field.projectedVal = val;
-        }
+        
     }
 }
