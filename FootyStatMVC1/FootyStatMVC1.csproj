@@ -225,7 +225,6 @@
     <Compile Include="Models\FootyStat\Actions\TotallingAction.cs" />
     <Compile Include="Models\FootyStat\Init\XmlConfig.cs" />
     <Compile Include="Models\FootyStat\Init\XmlInit.cs" />
-    <Compile Include="NUnitSampleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
