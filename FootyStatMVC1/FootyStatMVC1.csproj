@@ -70,6 +70,9 @@
       <Private>True</Private>
       <HintPath>..\packages\WatiN.2.1.0\lib\net40\Microsoft.mshtml.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -153,15 +156,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\FootyStatInit.cs" />
+    <Compile Include="App_Start\FootyStatNinjectBindings.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\ConstraintViewModels\BaseConstraintViewModel.cs" />
     <Compile Include="Controllers\ConstraintViewModels\GameweekCVM.cs" />
     <Compile Include="Controllers\ConstraintViewModels\HomeAwayCVM.cs" />
     <Compile Include="Controllers\ConstraintViewModels\MinsPlayedCVM.cs" />
     <Compile Include="Controllers\CurrentPlayerStatsViewModel.cs" />
+    <Compile Include="Controllers\FootyStatControllerFactory.cs" />
     <Compile Include="Controllers\MultipleButtonAttribute.cs" />
     <Compile Include="Controllers\PlayerStatController.cs" />
+    <Compile Include="Controllers\SessionWrapper\HttpContextSessionWrapper.cs" />
+    <Compile Include="Controllers\SessionWrapper\ISessionWrapper.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -367,7 +373,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54390</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

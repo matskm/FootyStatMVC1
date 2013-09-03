@@ -21,6 +21,11 @@ namespace FootyStatMVC1
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
+            // Override default ControllerFactory (to allow Dependency Injection)
+            ControllerBuilder.Current.SetControllerFactory(typeof(FootyStatMVC1.Controllers.FootyStatControllerFactory));
+                
+                
+
             // FootyStat init code
             //FootyStatInit.loadData();
 

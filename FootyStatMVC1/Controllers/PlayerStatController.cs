@@ -16,6 +16,7 @@ using FootyStatMVC1.Models.FootyStat.Factory;
 using FootyStatMVC1.Models.FootyStat.Factory.Inputs;
 using FootyStatMVC1.Models.FootyStat.SnapViewCommand.Strategies;
 using System.Reflection;
+using FootyStatMVC1.Controllers.SessionWrapper;
 
 using MCFactory = FootyStatMVC1.Models.FootyStat.Factory.MCFactoryWrapper;
 
@@ -23,7 +24,19 @@ namespace FootyStatMVC1.Controllers
 {
     public class PlayerStatController : Controller
     {
+        // Access to repositiory for this session
+        // This approach is from LukLed, on StackOverflow question 5060804
+        // Signature will be SessionWrapper.svd (both get and set are public)
+        public ISessionWrapper SessionWrapper { get; set; }
 
+        public PlayerStatController(ISessionWrapper sessionWrapper)
+        {
+            SessionWrapper = sessionWrapper;
+        }
+
+
+
+        // ViewModel
         public class PlayerStatViewModel
         {
 
@@ -190,7 +203,8 @@ namespace FootyStatMVC1.Controllers
 
         public SnapViewDirector get_svd()
         {
-            return FootyStatMVC1.FootyStatInit.get_svd();
+            //return FootyStatMVC1.FootyStatInit.get_svd();
+            return SessionWrapper.svd;
         }
 
         public ActionResult Index()
@@ -243,6 +257,10 @@ namespace FootyStatMVC1.Controllers
         // Get version of the View
         public ActionResult SelectPlayer()
         {
+            // This is the first page load - so initialise the (svd,snapview) pair here for this session.
+            // This init is protected from executing >1 internally. But this method does get called twice.
+            SessionWrapper.init_svd();
+            
             UpdateIndex_CS cmd_strategy = new UpdateIndex_CS(get_svd());
             List<string> idx_list = cmd_strategy.execute(FieldDictionary.fname_season);
             
