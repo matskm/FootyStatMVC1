@@ -40,11 +40,7 @@ namespace FootyStatMVC1.Models.FootyStat.Mediator
             
             // Either return the now non-null mySnapView or throw an exception and return.
             if (mySnapView != null) return mySnapView;
-            else
-            {
-                // Throw exception
-                return null;
-            }
+            else throw new SnapViewNotFoundException("Cannot find SnapView.");
         }
  
         // Most important MediatorColleague by far is the SnapView, so cache it.
@@ -112,14 +108,23 @@ namespace FootyStatMVC1.Models.FootyStat.Mediator
                     
                 }// foreach
 
-                // Do the iteration
-                if (!filters_involved)
+                try
                 {
-                    get_snapview().iterate(mca_list);
-                }
-                else
+
+                    // Do the iteration
+                    if (!filters_involved)
+                    {
+                        get_snapview().iterate(mca_list);
+                    }
+                    else
+                    {
+                        get_snapview().iterate_and_filter(mca_list);
+                    }
+
+                }//try
+                catch(SnapViewNotFoundException exc)
                 {
-                    get_snapview().iterate_and_filter(mca_list);
+                    System.Diagnostics.Debug.WriteLine(exc.ToString());
                 }
 
                 // Iterate over MC's and perform any Post methods
@@ -303,8 +308,20 @@ namespace FootyStatMVC1.Models.FootyStat.Mediator
 
 
 
+        // Exceptions
+        
+        // Cannot find associated SnapView
+        class SnapViewNotFoundException : Exception
+        {
+            public SnapViewNotFoundException() : base() { }
+            public SnapViewNotFoundException(string message) : base(message) { }
+            public SnapViewNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+            protected SnapViewNotFoundException(System.Runtime.Serialization.SerializationInfo info,
+                System.Runtime.Serialization.StreamingContext context)
+                : base(info, context) { }
 
+        }
         
 
-    }
-}
+    }// Class
+}// Namespace

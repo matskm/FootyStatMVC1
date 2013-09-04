@@ -54,10 +54,14 @@ namespace FootyStatMVC1.Models.FootyStat.SnapViewNS
         // Copy constructor to Clone this snapview only used by FootyStatInit to save a copy right at the start.
         public SnapView(SnapViewDirector svd, SnapView previous_sv) : base(svd)
         {
-            // Copy the table reference
-            table = previous_sv.table;
+            // Copy the table (DEEP COPY) because the table will be different for all users.
+            table = new List<SVRow>(100);
+            foreach (SVRow row in previous_sv.table)
+            {
+                table.Add(row);
+            }
 
-            // Create FieldDictionary object
+            // Shallow copy the dict because this is the same for all.
             dict = previous_sv.dict;
 
             // isValid default to true for snapview (different to actions)

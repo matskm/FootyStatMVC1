@@ -37,7 +37,20 @@ namespace FootyStatMVC1.Controllers.SessionWrapper
             
                 // Order is important as snapview needs svd in its constructor -> So create it before snapview
                 SnapViewDirector svd = new SnapViewDirector();
-                SnapView snapview = loadData(svd);
+
+                SnapView snapview = null;
+
+                // If the _initial_SnapView static member is null - read from disk (once per app instance)
+                // Otherwise copy the _initial_SnapView (once per new session)
+                if (_initial_SnapView == null)
+                {
+                    snapview = loadData(svd);
+                }
+                else
+                {
+                    // Copy the initial snapview (contains a deep copy of the table, but shallow copy of the dict)
+                    snapview = new SnapView(svd, _initial_SnapView);
+                }
 
                 // And register the snapview with the director           
                 svd.Attach(snapview);
@@ -53,15 +66,18 @@ namespace FootyStatMVC1.Controllers.SessionWrapper
         public SnapView loadData(SnapViewDirector svd)
         {
             // Create root level snapview here (passing in the SnapViewDirector)
-            SnapView snapView = new SnapView(svd);
+            _initial_SnapView = new SnapView(svd);
 
             // Initialise it
             XmlInit svInit = new XmlInit();
-            svInit.initSnapView(snapView);
+            svInit.initSnapView(_initial_SnapView);
 
-            return snapView;
+            return _initial_SnapView;
 
         }
+
+        // Static expt
+        static SnapView _initial_SnapView;
 
     }
 }
