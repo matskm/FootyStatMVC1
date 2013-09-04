@@ -31,12 +31,12 @@ namespace FootyStatMVC1.Controllers.SessionWrapper
         // Initialise the svd
         public void init_svd()
         {
-            // Only init if there is not already an entry for the svd in the current session:
+            // Only the initial init if there is not already an entry for the svd in the current session:
             if (GetFromSession<SnapViewDirector>("svd") == null)
             {
-            
+
                 // Order is important as snapview needs svd in its constructor -> So create it before snapview
-                SnapViewDirector svd = new SnapViewDirector();
+                SnapViewDirector svd_local = new SnapViewDirector();
 
                 SnapView snapview = null;
 
@@ -44,20 +44,29 @@ namespace FootyStatMVC1.Controllers.SessionWrapper
                 // Otherwise copy the _initial_SnapView (once per new session)
                 if (_initial_SnapView == null)
                 {
-                    snapview = loadData(svd);
+                    snapview = loadData(svd_local);
                 }
                 else
                 {
                     // Copy the initial snapview (contains a deep copy of the table, but shallow copy of the dict)
-                    snapview = new SnapView(svd, _initial_SnapView);
+                    snapview = new SnapView(svd_local, _initial_SnapView);
                 }
 
                 // And register the snapview with the director           
-                svd.Attach(snapview);
+                svd_local.Attach(snapview);
 
-            
+
                 // Set this for the current session
-                SetInSession("svd", svd);
+                SetInSession("svd", svd_local);
+            }
+            else
+            {
+                // If init has been called, but an svd already exists - reinitialise this svd.
+                // (This occurs if the user closes the window in the session, and navigates to the root SelectPlayer page)
+                svd = new SnapViewDirector();
+
+                SnapView snapview = new SnapView(svd, _initial_SnapView);
+                svd.Attach(snapview);
             }
 
             
