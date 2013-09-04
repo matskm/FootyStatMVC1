@@ -18,6 +18,12 @@ namespace FootyStatMVC1.Controllers.SessionWrapper
 
         private void SetInSession(string key, object value)
         {
+            // Only allow one [this-key,any-value] pair per session - so remove an existing object before adding the new one
+            if (GetFromSession<SnapViewDirector>(key) != null)
+            {
+                HttpContext.Current.Session.Remove(key);
+            }
+
             HttpContext.Current.Session[key] = value;
         }
 
@@ -63,7 +69,13 @@ namespace FootyStatMVC1.Controllers.SessionWrapper
             {
                 // If init has been called, but an svd already exists - reinitialise this svd.
                 // (This occurs if the user closes the window in the session, and navigates to the root SelectPlayer page)
+
+                // The setter automatically cleans out an exisiting svd in the session if its there.
                 svd = new SnapViewDirector();
+
+                // Property getter.
+                SnapViewDirector svd_ref = svd;
+
 
                 SnapView snapview = new SnapView(svd, _initial_SnapView);
                 svd.Attach(snapview);
